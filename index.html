@@ -1,0 +1,387 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <meta name="theme-color" content="#2563eb">
+    <meta name="description" content="Professional weather dashboard with forecasts, charts and interactive map">
+
+    <title>Weather Report Dashboard</title>
+
+    <link rel="manifest" href="manifest.json">
+
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+
+    <link
+        rel="stylesheet"
+        href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"
+    >
+
+    <link rel="stylesheet" href="style.css">
+</head>
+
+<body>
+
+<div class="app">
+
+    <header class="header">
+
+        <div class="brand">
+            <div class="brand-icon">☁️</div>
+
+            <div>
+                <h1>Weather<span>Report</span></h1>
+                <p>Smart weather dashboard</p>
+            </div>
+        </div>
+
+        <div class="header-actions">
+            <button id="installButton" class="icon-button hidden" title="Install App">
+                📱
+            </button>
+
+            <button id="themeButton" class="icon-button" title="Change Theme">
+                🌙
+            </button>
+
+            <button id="unitButton" class="unit-button">
+                °C
+            </button>
+        </div>
+
+    </header>
+
+
+    <main>
+
+        <section class="search-section">
+
+            <div class="search-box">
+
+                <input
+                    type="text"
+                    id="cityInput"
+                    placeholder="Search city..."
+                    autocomplete="off"
+                >
+
+                <button id="searchButton">
+                    🔍
+                    <span>Search</span>
+                </button>
+
+            </div>
+
+            <button id="locationButton" class="location-button">
+                📍 Use My Location
+            </button>
+
+        </section>
+
+
+        <section id="favoritesSection" class="favorites-section">
+
+            <div class="section-title">
+                <div>
+                    <p class="label">QUICK ACCESS</p>
+                    <h2>⭐ Favorite Cities</h2>
+                </div>
+            </div>
+
+            <div id="favoritesContainer" class="favorites-container"></div>
+
+        </section>
+
+
+        <div id="loading" class="loading hidden">
+
+            <div class="spinner"></div>
+
+            <p>Getting latest weather information...</p>
+
+        </div>
+
+
+        <div id="errorMessage" class="error hidden"></div>
+
+
+        <section id="alertSection" class="alert-section hidden">
+
+            <div class="alert-title">
+                <span>🔔</span>
+                <strong>Weather Alert</strong>
+            </div>
+
+            <div id="alertContainer"></div>
+
+        </section>
+
+
+        <section id="weatherContent" class="hidden">
+
+
+            <section class="current-weather">
+
+                <div class="location-info">
+
+                    <div class="location-title">
+
+                        <div>
+                            <p class="label">CURRENT WEATHER</p>
+
+                            <h2 id="cityName">Guntur</h2>
+
+                            <p id="countryName">India</p>
+                        </div>
+
+                        <button id="favoriteButton" class="favorite-button">
+                            ☆
+                        </button>
+
+                    </div>
+
+                    <p id="dateTime">Loading...</p>
+
+                    <p id="weatherDescription">
+                        Clear Sky
+                    </p>
+
+                </div>
+
+
+                <div class="temperature-section">
+
+                    <div id="weatherIcon" class="weather-icon">
+                        ☀️
+                    </div>
+
+                    <div>
+
+                        <div class="temperature">
+                            <span id="temperature">--</span><sup>°</sup>
+                        </div>
+
+                        <p>
+                            Feels like
+                            <span id="feelsLike">--</span>°
+                        </p>
+
+                    </div>
+
+                </div>
+
+            </section>
+
+
+            <section class="stats-grid">
+
+                <div class="stat-card">
+                    <div class="stat-icon">💧</div>
+
+                    <div>
+                        <span>Humidity</span>
+                        <strong id="humidity">--%</strong>
+                    </div>
+                </div>
+
+
+                <div class="stat-card">
+                    <div class="stat-icon">💨</div>
+
+                    <div>
+                        <span>Wind Speed</span>
+                        <strong id="windSpeed">-- km/h</strong>
+                    </div>
+                </div>
+
+
+                <div class="stat-card">
+                    <div class="stat-icon">🌧️</div>
+
+                    <div>
+                        <span>Rain Chance</span>
+                        <strong id="rainChance">--%</strong>
+                    </div>
+                </div>
+
+
+                <div class="stat-card">
+                    <div class="stat-icon">☀️</div>
+
+                    <div>
+                        <span>UV Index</span>
+                        <strong id="uvIndex">--</strong>
+                    </div>
+                </div>
+
+            </section>
+
+
+            <section class="sun-section">
+
+                <div class="sun-card">
+
+                    <div class="sun-icon">🌅</div>
+
+                    <div>
+                        <span>Sunrise</span>
+                        <strong id="sunrise">--:--</strong>
+                    </div>
+
+                </div>
+
+
+                <div class="sun-card">
+
+                    <div class="sun-icon">🌇</div>
+
+                    <div>
+                        <span>Sunset</span>
+                        <strong id="sunset">--:--</strong>
+                    </div>
+
+                </div>
+
+            </section>
+
+
+            <section class="panel">
+
+                <div class="section-title">
+
+                    <div>
+                        <p class="label">NEXT 24 HOURS</p>
+                        <h2>🕐 Hourly Forecast</h2>
+                    </div>
+
+                </div>
+
+                <div id="hourlyContainer" class="hourly-container"></div>
+
+            </section>
+
+
+            <section class="panel chart-panel">
+
+                <div class="section-title">
+
+                    <div>
+                        <p class="label">TEMPERATURE TREND</p>
+                        <h2>📊 24-Hour Temperature</h2>
+                    </div>
+
+                </div>
+
+                <div class="chart-container">
+                    <canvas id="temperatureChart"></canvas>
+                </div>
+
+            </section>
+
+
+            <section class="forecast-section">
+
+                <div class="section-title">
+
+                    <div>
+                        <p class="label">UPCOMING DAYS</p>
+                        <h2>📅 5-Day Forecast</h2>
+                    </div>
+
+                </div>
+
+                <div id="forecastContainer" class="forecast-container"></div>
+
+            </section>
+
+
+            <section class="panel map-panel">
+
+                <div class="section-title">
+
+                    <div>
+                        <p class="label">LOCATION</p>
+                        <h2>🗺️ Interactive Weather Map</h2>
+                    </div>
+
+                </div>
+
+                <div id="map"></div>
+
+            </section>
+
+
+            <section class="map-info">
+
+                <div>
+                    <span>Latitude</span>
+                    <strong id="latitude">--</strong>
+                </div>
+
+                <div>
+                    <span>Longitude</span>
+                    <strong id="longitude">--</strong>
+                </div>
+
+                <div>
+                    <span>Timezone</span>
+                    <strong id="timezone">--</strong>
+                </div>
+
+            </section>
+
+
+        </section>
+
+    </main>
+
+
+    <footer>
+
+        <div>
+            Weather data:
+            <a
+                href="https://open-meteo.com/"
+                target="_blank"
+                rel="noopener"
+            >
+                Open-Meteo
+            </a>
+        </div>
+
+        <div>
+            Maps:
+            <a
+                href="https://www.openstreetmap.org/"
+                target="_blank"
+                rel="noopener"
+            >
+                OpenStreetMap
+            </a>
+        </div>
+
+        <div>
+            Weather Report © 2026
+        </div>
+
+    </footer>
+
+</div>
+
+
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
+<script
+    src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js">
+</script>
+
+<script src="script.js"></script>
+
+</body>
+</html>
+```
